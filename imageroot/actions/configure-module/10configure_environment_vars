@@ -8,6 +8,8 @@
 import json
 import sys
 import agent
+import base64
+import os
 
 # Try to parse the stdin as JSON.
 # If parsing fails, output everything to stderr
@@ -15,19 +17,36 @@ data = json.load(sys.stdin)
 
 #This is specific to you module, so you need to change it accordingly.
 # we read a json stdin {"vars1":true, "var2":"foo", "vars3": 3} and we writ it to .config/state/environment
-# Upper case to set environment variable and minor case to read from stdin
 
-# this values must exists in the json stdin
-# agent.set_env("MAIL_SERVER", data["mail_server"])
-# agent.set_env("LDAP_DOMAIN", data["ldap_domain"])
+MARIADB_ROOT_PASSWORD = data.get("MARIADB_ROOT_PASSWORD", "Monica@1234")
+MARIADB_DATABASE = data.get("MARIADB_DATABASE", "monica")
+MARIADB_USER = data.get("MARIADB_USER", "monica")
+MARIADB_PASSWORD = data.get("MARIADB_PASSWORD", "Monica@1234")
+# Maria db variables
+mariadb = {
+    "MYSQL_ROOT_PASSWORD": MARIADB_ROOT_PASSWORD,
+    "MYSQL_DATABASE": MARIADB_DATABASE,
+    "MYSQL_USER": MARIADB_USER,
+    "MYSQL_PASSWORD": MARIADB_PASSWORD,
+}
+agent.write_envfile("database.env", mariadb)
 
-# you can add default values for the following variables
-# agent.set_env("MAIL_DOMAIN",data.get("mail_domain",""))
-# agent.set_env("WOWORKERSCOUNT",data.get("workers_count",3))
-# agent.set_env("AUXILIARYACCOUNT",data.get("auxiliary_account",True))
-# agent.set_env("ACTIVESYNC",data.get("activesync",False))
+# Application File
+random_bytes = os.urandom(32)
+base64_bytes = base64.b64encode(random_bytes)
+base64_message = base64_bytes.decode('utf-8')
+APP_KEY = "base64:" + base64_message
+DB_HOST="localhost"
+DB_USERNAME=MARIADB_USER
+DB_PASSWORD=MARIADB_PASSWORD
+
+app = {
+    "APP_KEY": APP_KEY,
+    "DB_HOST": DB_HOST,
+    "DB_USERNAME": DB_USERNAME,
+    "DB_PASSWORD": DB_PASSWORD,
+}
+agent.write_envfile("app.env", app)
 
 
-# Make sure everything is saved inside the environment file
-# just before starting systemd unit
 #agent.dump_env()

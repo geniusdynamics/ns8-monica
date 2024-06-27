@@ -24,7 +24,7 @@
         <cv-tile light>
           <cv-form @submit.prevent="configureModule">
             <cv-text-input
-              :label="$t('settings.kickstart_fqdn')"
+              :label="$t('settings.monica_fqdn')"
               placeholder="monica.example.org"
               v-model.trim="host"
               class="mg-bottom"

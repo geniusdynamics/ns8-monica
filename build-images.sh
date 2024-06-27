@@ -14,7 +14,7 @@ images=()
 repobase="${REPOBASE:-ghcr.io/nethserver}"
 # Configure the image name
 reponame="kickstart"
-
+APP_VERSION="2.8.0"
 # Create a new empty container image
 container=$(buildah from scratch)
 
@@ -45,7 +45,7 @@ buildah config --entrypoint=/ \
     --label="org.nethserver.authorizations=traefik@node:routeadm" \
     --label="org.nethserver.tcp-ports-demand=1" \
     --label="org.nethserver.rootfull=0" \
-    --label="org.nethserver.images=docker.io/postgres:15.5-alpine3.19 docker.io/nginx:stable-alpine3.17" \
+    --label="org.nethserver.images=docker.io/library/redis:7.2.3-bookworm docker.io/postgres:15.5-alpine3.19 docker.io/getmeili/meilisearch:latest ghcr.io/monicahq/monica-next:main" \
     "${container}"
 # Commit the image
 buildah commit "${container}" "${repobase}/${reponame}"

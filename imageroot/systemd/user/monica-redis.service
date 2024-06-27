@@ -1,0 +1,25 @@
+[Unit]
+Description=Podman monica-redis.service
+BindsTo=monica.service
+After=postgresql-app.service
+
+[Service]
+Environment=PODMAN_SYSTEMD_UNIT=%n REDIS_IMAGE=docker.io/library/redis:7
+EnvironmentFile=%S/state/environment
+Restart=always
+TimeoutStopSec=70
+ExecStartPre=/bin/rm -f %t/monica-redis.pid %t/monica-redis.ctr-id
+ExecStart=/usr/bin/podman run --conmon-pidfile %t/monica-redis.pid \
+    --cidfile %t/monica-redis.ctr-id \
+    --cgroups=no-conmon \
+    --pod-id-file %t/ns8-monica.pod-id --replace -d \
+    --name monica-redis \
+    -v monica-redis-data:/data \
+    ${REDIS_IMAGE} ---requirepass ${MONICA_REDIS_PASSWORD}
+ExecStop=/usr/bin/podman stop --ignore --cidfile %t/monica-redis.ctr-id -t 10
+ExecStopPost=/usr/bin/podman rm --ignore -f --cidfile %t/monica-redis.ctr-id
+PIDFile=%t/monica-redis.pid
+Type=forking
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,36 @@
+#
+# Copyright (C) 2022 Nethesis S.r.l.
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+
+[Unit]
+Description=Podman  monica-app.service
+BindsTo=monica.service
+After=monica.service postgresql-app.service monica-redis.service
+
+[Service]
+Environment=PODMAN_SYSTEMD_UNIT=%n
+EnvironmentFile=%S/state/environment
+EnvironmentFile=-%S/state/smarthost.env
+WorkingDirectory=%S/state
+Restart=always
+TimeoutStopSec=70
+ExecStartPre=/bin/mkdir -p config
+ExecStartPre=/bin/rm -f %t/monica-app.pid %t/monica-app.ctr-id
+ExecStartPre=-runagent discover-smarthost
+ExecStart=/usr/bin/podman run --conmon-pidfile %t/monica-app.pid \
+    --cidfile %t/monica-app.ctr-id --cgroups=no-conmon \
+    --pod-id-file %t/monica.pod-id --replace -d --name  monica-app \
+    --volume monica-app:/meili_data:Z \
+    --env=MEILISEARCH_* \
+    --env MEILI_MASTER_KEY=${MONICA_MEILI_MASTER_KEY} \
+    ${MEILISEARCH_IMAGE}
+ExecStop=/usr/bin/podman stop --ignore --cidfile %t/monica-app.ctr-id -t 10
+ExecReload=/usr/bin/podman kill -s HUP monica-app
+SyslogIdentifier=%u
+ExecStopPost=/usr/bin/podman rm --ignore -f --cidfile %t/monica-app.ctr-id
+PIDFile=%t/monica-app.pid
+Type=forking
+
+[Install]
+WantedBy=default.target

@@ -11,6 +11,7 @@ Before=monica-redis.service
 [Service]
 Environment=PODMAN_SYSTEMD_UNIT=%n
 EnvironmentFile=%S/state/environment
+EnvironmentFile=%S/state/database.env
 # EnvironmentFile=%S/state/secrets/passwords.secret
 Restart=always
 TimeoutStopSec=70
@@ -19,7 +20,7 @@ ExecStartPre=/bin/mkdir -p %S/state/restore/
 ExecStart=/usr/bin/podman run --conmon-pidfile %t/mariadb-app.pid \
     --cidfile %t/mariadb-app.ctr-id --cgroups=no-conmon \
     --pod-id-file %t/monica.pod-id --replace -d --name mariadb-app \
-     --env-file=%S/state/databse.env \
+     --env-file=%S/state/database.env \
     --volume mysql-data:/var/lib/mysql/:Z \
     --env=MYSQL_* \
     ${MARIADB_IMAGE} \

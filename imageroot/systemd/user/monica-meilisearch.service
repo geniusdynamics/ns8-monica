@@ -6,7 +6,7 @@
 [Unit]
 Description=Podman  monica-app.service
 BindsTo=monica.service
-After=monica.service postgresql-app.service monica-redis.service
+After=monica.service mariadb-app.service monica-redis.service
 
 [Service]
 Environment=PODMAN_SYSTEMD_UNIT=%n

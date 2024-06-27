@@ -6,12 +6,13 @@
 [Unit]
 Description=Podman  monica-app.service
 BindsTo=monica.service
-After=monica.service postgresql-app.service monica-redis.service monica-meilisearch.service
+After=monica.service mariadb-app.service monica-redis.service monica-meilisearch.service
 
 [Service]
 Environment=PODMAN_SYSTEMD_UNIT=%n
 EnvironmentFile=%S/state/environment
 EnvironmentFile=-%S/state/smarthost.env
+EnvironmentFile=-%S/state/app.env
 WorkingDirectory=%S/state
 Restart=always
 TimeoutStopSec=70
@@ -25,16 +26,15 @@ ExecStart=/usr/bin/podman run --conmon-pidfile %t/monica-app.pid \
     --volume ./config:/tmp:Z \
     --env-file=smarthost.env \
     --env=MONICA_* \
-    --env DB_CONNECTION=pgsql \
-    --env DB_HOST=postgresql-app \
-    --env DB_PORT=5432 \
+    --env=DB_* \
+    --env DB_CONNECTION=mysql \
+    --env DB_HOST=${DB_HOST} \
+    --env DB_PORT=3306 \
     --env DB_DATABASE=monica \
-    --env DB_USERNAME=monica \
-    --env DB_PASSWORD=${MONICA_POSTGRES_PASS} \
     --env APP_ENV=production \
-    --env APP_URL=https://monica.${MY_DOMAIN} \
+    --env APP_URL=${APP_URL} \
     --env APP_TRUSTED_PROXIES=* \
-    --env APP_KEY=${MONICA_APP_KEY} \
+    --env APP_KEY=${APP_KEY} \
     --env LOCATION_IQ_API_KEY=${MONICA_LOCATION_IQ_API_KEY} \
     --env MAPBOX_API_KEY=${MONICA_MAPBOX_API_KEY} \
     --env MAPBOX_USERNAME=${MAPBOX_USERNAME} \

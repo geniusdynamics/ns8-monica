@@ -39,12 +39,13 @@ APP_KEY = "base64:" + base64_message
 DB_HOST="localhost"
 DB_USERNAME=MARIADB_USER
 DB_PASSWORD=MARIADB_PASSWORD
-
+APP_URL = data.get("host", "")
 app = {
     "APP_KEY": APP_KEY,
     "DB_HOST": DB_HOST,
     "DB_USERNAME": DB_USERNAME,
     "DB_PASSWORD": DB_PASSWORD,
+    "APP_URL": "https://"+APP_URL,
 }
 agent.write_envfile("app.env", app)
 

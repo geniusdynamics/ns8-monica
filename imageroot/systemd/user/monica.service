@@ -10,8 +10,8 @@
 
 [Unit]
 Description=Podman monica.service
-Requires=postgresql-app.service monica-app.service
-Before=postgresql-app.service monica-app.service
+Requires=mariadb-app.service monica-app.service
+Before=mariadb-app.service monica-app.service
 
 [Service]
 Environment=PODMAN_SYSTEMD_UNIT=%n

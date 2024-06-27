@@ -55,7 +55,7 @@ ExecStart=/usr/bin/podman run --conmon-pidfile %t/monica-app.pid \
     --env MAIL_ENCRYPTION=${SMTP_ENCRYPTION} \
     --env MAIL_FROM_ADDRESS=${SMTP_FROM} \
     --env MAIL_FROM_NAME=MONICA \
-    ${MONICA_NEXT_IMAGE}
+    ${MONICA_IMAGE}
 ExecStop=/usr/bin/podman stop --ignore --cidfile %t/monica-app.ctr-id -t 10
 ExecReload=/usr/bin/podman kill -s HUP monica-app
 SyslogIdentifier=%u

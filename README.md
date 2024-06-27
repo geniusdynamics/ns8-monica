@@ -7,9 +7,11 @@ for : [monica](https://github.com/monicahq/monica/).
 ## Install
 
 Instantiate the module with:
+```shell
+add-module ghcr.io/geniusdynamics/monica:latest 1
 
-    add-module ghcr.io/geniusdynamics/monica:latest 1
-
+```
+    
 The output of the command will return the instance name.
 Output example:
 
@@ -44,22 +46,26 @@ The above command will:
 ## Get the configuration
 You can retrieve the configuration with
 
-```
+```shell
 api-cli run get-configuration --agent module/monica1
 ```
 
 ## Uninstall
 
 To uninstall the instance:
-
+```shell
     remove-module --no-preserve monica1
+```
+
 
 ## Update
 
 To Update the instance:
+```shell
+api-cli run update-module --data '{"module_url":"ghcr.io/geniusdynamics/monica:latest","instances":["monica1"],"force":true}'
 
-    api-cli run update-module --data '{"module_url":"ghcr.io/geniusdynamics/monica:latest","instances":["monica1"],"force":true}'
-
+```
+    
 ## Smarthost setting discovery
 
 Some configuration settings, like the smarthost setup, are not part of the

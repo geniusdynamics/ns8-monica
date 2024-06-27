@@ -45,6 +45,7 @@ app = {
     "DB_HOST": DB_HOST,
     "DB_USERNAME": DB_USERNAME,
     "DB_PASSWORD": DB_PASSWORD,
+    "DB_DATABASE": MARIADB_DATABASE,
     "APP_URL": "https://"+APP_URL,
 }
 agent.write_envfile("app.env", app)

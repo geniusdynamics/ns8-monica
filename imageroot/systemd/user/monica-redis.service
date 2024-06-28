@@ -12,7 +12,7 @@ ExecStartPre=/bin/rm -f %t/monica-redis.pid %t/monica-redis.ctr-id
 ExecStart=/usr/bin/podman run --conmon-pidfile %t/monica-redis.pid \
     --cidfile %t/monica-redis.ctr-id \
     --cgroups=no-conmon \
-    --pod-id-file %t/ns8-monica.pod-id --replace -d \
+    --pod-id-file %t/monica.pod-id --replace -d \
     --name monica-redis \
     -v monica-redis-data:/data \
     ${REDIS_IMAGE} ---requirepass ${MONICA_REDIS_PASSWORD}

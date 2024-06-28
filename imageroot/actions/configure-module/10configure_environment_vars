@@ -48,7 +48,10 @@ app = {
     "DB_DATABASE": MARIADB_DATABASE,
     "APP_URL": "https://"+APP_URL,
 }
+
 agent.write_envfile("app.env", app)
 
+data.set_env("MONICA_REDIS_PASSWORD", "Monica@redis")
 
-#agent.dump_env()
+
+agent.dump_env()

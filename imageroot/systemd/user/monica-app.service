@@ -45,6 +45,7 @@ ExecStart=/usr/bin/podman run --conmon-pidfile %t/monica-app.pid \
     --env SESSION_DRIVER=redis \
     --env QUEUE_CONNECTION=redis \
     --env REDIS_HOST=monica-redis \
+    --env REDIS_PORT=6379 \
     --env REDIS_PASSWORD=${MONICA_REDIS_PASSWORD} \
     --env MAIL_MAILER=smtp \
     --env MAIL_HOST=${SMTP_HOST} \

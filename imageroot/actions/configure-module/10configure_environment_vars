@@ -51,7 +51,7 @@ app = {
 
 agent.write_envfile("app.env", app)
 
-data.set_env("MONICA_REDIS_PASSWORD", "Monica@redis")
+agent.set_env("MONICA_REDIS_PASSWORD", "Monica@redis")
 
 
 agent.dump_env()

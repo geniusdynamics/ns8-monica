@@ -22,7 +22,7 @@ ExecStartPre=-runagent discover-smarthost
 ExecStart=/usr/bin/podman run --conmon-pidfile %t/monica-app.pid \
     --cidfile %t/monica-app.ctr-id --cgroups=no-conmon \
     --pod-id-file %t/monica.pod-id --replace -d --name  monica-app \
-    --volume monica-app:/var/www/html/storage:Z \
+    --volume monica-data:/var/www/html/storage:Z \
     --env-file=smarthost.env \
     --env=MONICA_* \
     --env=DB_* \

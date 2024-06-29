@@ -47,6 +47,7 @@ app = {
     "DB_PASSWORD": DB_PASSWORD,
     "DB_DATABASE": MARIADB_DATABASE,
     "APP_URL": "https://"+APP_URL,
+    "TRUSTED_PROXIES": "*",
 }
 
 agent.write_envfile("app.env", app)

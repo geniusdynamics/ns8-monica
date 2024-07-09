@@ -14,7 +14,7 @@ images=()
 repobase="${REPOBASE:-ghcr.io/geniusdynamics}"
 # Configure the image name
 reponame="monica"
-APP_VERSION="2.8.0"
+APP_VERSION="5.0.0-beta.4-fpm"
 # Create a new empty container image
 container=$(buildah from scratch)
 
@@ -45,7 +45,7 @@ buildah config --entrypoint=/ \
     --label="org.nethserver.authorizations=traefik@node:routeadm" \
     --label="org.nethserver.tcp-ports-demand=1" \
     --label="org.nethserver.rootfull=0" \
-    --label="org.nethserver.images=docker.io/library/redis:7.2.3-bookworm docker.io/postgres:15.5-alpine3.19 docker.io/getmeili/meilisearch:latest docker.io/monica:latest docker.io/mariadb:10.11.5" \
+    --label="org.nethserver.images=docker.io/library/redis:7.2.3-bookworm docker.io/postgres:15.5-alpine3.19 docker.io/getmeili/meilisearch:latest docker.io/monica:${APP_VERSION} docker.io/mariadb:10.11.5" \
     "${container}"
 # Commit the image
 buildah commit "${container}" "${repobase}/${reponame}"

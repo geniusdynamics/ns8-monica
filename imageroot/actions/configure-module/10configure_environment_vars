@@ -16,37 +16,33 @@ import os
 data = json.load(sys.stdin)
 
 #This is specific to you module, so you need to change it accordingly.
-# we read a json stdin {"vars1":true, "var2":"foo", "vars3": 3} and we writ it to .config/state/environment
 
-MARIADB_ROOT_PASSWORD = data.get("MARIADB_ROOT_PASSWORD", "Monica@1234")
-MARIADB_DATABASE = data.get("MARIADB_DATABASE", "monica")
-MARIADB_USER = data.get("MARIADB_USER", "monica")
-MARIADB_PASSWORD = data.get("MARIADB_PASSWORD", "Monica@1234")
-# Maria db variables
-mariadb = {
-    "MYSQL_ROOT_PASSWORD": MARIADB_ROOT_PASSWORD,
-    "MYSQL_DATABASE": MARIADB_DATABASE,
-    "MYSQL_USER": MARIADB_USER,
-    "MYSQL_PASSWORD": MARIADB_PASSWORD,
-}
-agent.write_envfile("database.env", mariadb)
+# SMTP
+rdb = agent.redis_connect(use_replica=True)
+smtp_settings = agent.get_smarthost_settings(rdb)
+
+MAIL_DRIVER = "smtp"
+MAIL_HOST = smtp_settings["host"]
+MAIL_PORT = smtp_settings["port"]
+MAIL_USERNAME = smtp_settings["username"]
+MAIL_PASSWORD = smtp_settings["password"]
+MAIL_ENCRYPTION = smtp_settings["encryption"]
+MAIL_FROM_ADDRESS=smtp_settings["username"]
+MAIL_REPLY_TO_ADDRESS=smtp_settings["username"]
 
 # Application File
-random_bytes = os.urandom(32)
-base64_bytes = base64.b64encode(random_bytes)
-base64_message = base64_bytes.decode('utf-8')
-APP_KEY = "base64:" + base64_message
-DB_HOST="localhost"
-DB_USERNAME=MARIADB_USER
-DB_PASSWORD=MARIADB_PASSWORD
+
 APP_URL = data.get("host", "")
 app = {
-    "APP_KEY": APP_KEY,
-    "DB_HOST": DB_HOST,
-    "DB_USERNAME": DB_USERNAME,
-    "DB_PASSWORD": DB_PASSWORD,
-    "DB_DATABASE": MARIADB_DATABASE,
     "APP_URL": "https://"+APP_URL,
+    "MAIL_DRIVER": MAIL_DRIVER,
+    "MAIL_HOST": MAIL_HOST,
+    "MAIL_PORT": MAIL_PORT,
+    "MAIL_USERNAME": MAIL_USERNAME,
+    "MAIL_PASSWORD": MAIL_PASSWORD,
+    "MAIL_ENCRYPTION": MAIL_ENCRYPTION,
+    "MAIL_FROM_ADDRESS": MAIL_FROM_ADDRESS,
+    "MAIL_REPLY_TO_ADDRESS": MAIL_REPLY_TO_ADDRESS,
 }
 
 agent.write_envfile("app.env", app)

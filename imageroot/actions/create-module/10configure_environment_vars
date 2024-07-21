@@ -1,0 +1,57 @@
+#!/usr/bin/env python3
+
+#
+# Copyright (C) 2022 Nethesis S.r.l.
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+
+import json
+import sys
+import agent
+import base64
+import os
+
+# Try to parse the stdin as JSON.
+# If parsing fails, output everything to stderr
+data = json.load(sys.stdin)
+
+#This is specific to you module, so you need to change it accordingly.
+
+def generate_random_password(length):
+    # Generate random bytes and convert them to a hexadecimal string
+    random_bytes = os.urandom(length)
+    password = random_bytes.hex()
+    return password[:length]
+
+MARIADB_ROOT_PASSWORD = data.get("MARIADB_ROOT_PASSWORD", "Monica@1234")
+MARIADB_DATABASE = data.get("MARIADB_DATABASE", "monica")
+MARIADB_USER = data.get("MARIADB_USER", "monica")
+MARIADB_PASSWORD = generate_random_password(16)
+# Maria db variables
+mariadb = {
+    "MYSQL_ROOT_PASSWORD": MARIADB_ROOT_PASSWORD,
+    "MYSQL_DATABASE": MARIADB_DATABASE,
+    "MYSQL_USER": MARIADB_USER,
+    "MYSQL_PASSWORD": MARIADB_PASSWORD,
+}
+agent.write_envfile("database.env", mariadb)
+
+# Application File
+random_bytes = os.urandom(32)
+base64_bytes = base64.b64encode(random_bytes)
+base64_message = base64_bytes.decode('utf-8')
+APP_KEY = "base64:" + base64_message
+
+app_config = {
+    "APP_KEY": APP_KEY,
+    "DB_HOST": "mariadb-app",
+    "DB_USERNAME": MARIADB_USER,
+    "DB_PASSWORD": MARIADB_PASSWORD,
+    "DB_DATABASE": MARIADB_DATABASE,
+}
+
+agent.write_envfile("app-db.env", app_config)
+
+
+
+agent.dump_env()

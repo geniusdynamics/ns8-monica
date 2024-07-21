@@ -26,7 +26,7 @@ MAIL_HOST = smtp_settings["host"]
 MAIL_PORT = smtp_settings["port"]
 MAIL_USERNAME = smtp_settings["username"]
 MAIL_PASSWORD = smtp_settings["password"]
-MAIL_ENCRYPTION = smtp_settings["encryption"]
+MAIL_ENCRYPTION = smtp_settings["encrypt_smtp"]
 MAIL_FROM_ADDRESS=smtp_settings["username"]
 MAIL_REPLY_TO_ADDRESS=smtp_settings["username"]
 

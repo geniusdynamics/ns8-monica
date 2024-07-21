@@ -37,8 +37,8 @@ APP_URL = data.get("host", "")
 app = {
     "APP_URL": "https://"+APP_URL,
     "APP_TRUSTED_PROXIES": "*",
-    "APP_ENV": "local",
-    "APP_DEBUG": "true",
+    "APP_ENV": "production",
+    "APP_DEBUG": "false",
     "MAIL_DRIVER": MAIL_DRIVER,
     "MAIL_HOST": MAIL_HOST,
     "MAIL_PORT": MAIL_PORT,

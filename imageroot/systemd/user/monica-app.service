@@ -26,6 +26,7 @@ ExecStart=/usr/bin/podman run --conmon-pidfile %t/monica-app.pid \
     --env-file=smarthost.env \
     --env-file=%S/state/app-db.env \
     --env-file=%S/state/app.env \
+    --env REDIS_PASSWORD=null \
     ${MONICA_IMAGE}
 ExecStop=/usr/bin/podman stop --ignore --cidfile %t/monica-app.ctr-id -t 10
 ExecReload=/usr/bin/podman kill -s HUP monica-app

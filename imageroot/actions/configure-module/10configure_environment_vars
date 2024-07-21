@@ -32,6 +32,7 @@ MAIL_REPLY_TO_ADDRESS=smtp_settings["username"]
 
 # Application File
 
+
 APP_URL = data.get("host", "")
 app = {
     "APP_URL": "https://"+APP_URL,
@@ -47,6 +48,10 @@ app = {
     "MAIL_REPLY_TO_ADDRESS": MAIL_REPLY_TO_ADDRESS,
     "REDIS_HOST": "monica-redis",
     "REDIS_PORT":"6379",
+    "CACHE_DRIVER": "redis",
+    "SESSION_DRIVER": "redis",
+    "QUEUE_CONNECTION": "redis",
+    "DB_CONNECTION": "mysql",
 }
 
 agent.write_envfile("app.env", app)

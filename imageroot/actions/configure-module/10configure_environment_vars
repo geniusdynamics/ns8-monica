@@ -21,7 +21,7 @@ data = json.load(sys.stdin)
 rdb = agent.redis_connect(use_replica=True)
 smtp_settings = agent.get_smarthost_settings(rdb)
 
-MAIL_DRIVER = "smtp"
+MAIL_MAILER = "smtp"
 MAIL_HOST = smtp_settings["host"]
 MAIL_PORT = smtp_settings["port"]
 MAIL_USERNAME = smtp_settings["username"]
@@ -39,7 +39,7 @@ app = {
     "APP_TRUSTED_PROXIES": "*",
     "APP_ENV": "production",
     "APP_DEBUG": "false",
-    "MAIL_DRIVER": MAIL_DRIVER,
+    "MAIL_MAILER": MAIL_MAILER,
     "MAIL_HOST": MAIL_HOST,
     "MAIL_PORT": MAIL_PORT,
     "MAIL_USERNAME": MAIL_USERNAME,

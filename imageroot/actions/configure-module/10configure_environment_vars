@@ -35,6 +35,8 @@ MAIL_REPLY_TO_ADDRESS=smtp_settings["username"]
 APP_URL = data.get("host", "")
 app = {
     "APP_URL": "https://"+APP_URL,
+    "APP_TRUSTED_PROXIES": "*",
+    "APP_ENV": "production",
     "MAIL_DRIVER": MAIL_DRIVER,
     "MAIL_HOST": MAIL_HOST,
     "MAIL_PORT": MAIL_PORT,
@@ -43,6 +45,8 @@ app = {
     "MAIL_ENCRYPTION": MAIL_ENCRYPTION,
     "MAIL_FROM_ADDRESS": MAIL_FROM_ADDRESS,
     "MAIL_REPLY_TO_ADDRESS": MAIL_REPLY_TO_ADDRESS,
+    "REDIS_HOST": "monica-redis",
+    "REDIS_PORT":"6379",
 }
 
 agent.write_envfile("app.env", app)

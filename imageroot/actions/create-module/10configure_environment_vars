@@ -24,7 +24,7 @@ def generate_random_password(length):
     return password[:length]
 
 
-MARIADB_ROOT_PASSWORD = data.get("MARIADB_ROOT_PASSWORD", "Monica@1234")
+MARIADB_ROOT_PASSWORD =generate_random_password(16)
 MARIADB_DATABASE = data.get("MARIADB_DATABASE", "monica")
 MARIADB_USER = data.get("MARIADB_USER", "monica")
 MARIADB_PASSWORD = generate_random_password(16)

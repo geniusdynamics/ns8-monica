@@ -5,4 +5,4 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
 
-rm -vf monica.pg_dump
+rm -vf monica.sql

@@ -8,30 +8,31 @@
 set -e -o pipefail
 exec 1>&2 # Redirect any output to the journal (stderr)
 
-mkdir -vp restore
-cat - >restore/monica_restore.sh <<'EOS'
-# Read dump file from standard input:
-pg_restore --no-owner --no-privileges -U postgres -d monica
-ec=$?
+# Prepare an initialization script that restores the dump file
+mkdir -vp initdb.d
+mv -v monica.sql initdb.d
+#do the bash file to restore and exit once done
+cat - >initdb.d/zz_monica_restore.sh <<'EOS'
+# Print additional information:
+mysql --version
+# The script is sourced, override entrypoint args and exit:
+set -- true
 docker_temp_server_stop
-exit $ec
+exit 0
 EOS
 
-# Override the image /docker-entrypoint-initdb.d contents, to restore the
-# DB dump file. The container will be stopped at the end
+# once we exit we remove initdb.d
+trap 'rm -rfv initdb.d/' EXIT
 
+# we start a container to initiate a database and load the dump
+# at the end of monica_restore.sh the dump is loaded and
+# we exit the container
 podman run \
-    --rm \
-    --interactive \
-    --network=none \
-    --volume=./restore:/docker-entrypoint-initdb.d/:Z \
-    --volume=postgres-data:/var/lib/postgresql/data:Z \
-    --replace --name=restore_db \
-    --env POSTGRES_USER=postgres \
-    --env POSTGRES_PASSWORD=Nethesis,1234 \
-    --env POSTGRES_DB=monica \
-    --env TZ=UTC \
-    "${POSTGRES_IMAGE}" < monica.pg_dump
-
-# If the restore is successful, clean up:
-rm -rfv restore/ monica.pg_dump
+  --rm \
+  --interactive \
+  --network=none \
+  --volume=./initdb.d:/docker-entrypoint-initdb.d:z \
+  --volume mysql-data:/var/lib/mysql/:Z \
+  --env-file=databse.env \
+  --replace --name=restore_db \
+  "${MARIADB_IMAGE}"

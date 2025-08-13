@@ -10,8 +10,8 @@
 
 [Unit]
 Description=Podman monica.service
-Requires=mariadb-app.service monica-app.service monica-redis.service
-Before=mariadb-app.service monica-app.service monica-redis.service
+Requires=mariadb-app.service monica-app.service monica-redis.service monica-meilisearch.service
+Before=mariadb-app.service monica-app.service monica-redis.service monica-meilisearch.service
 
 [Service]
 Environment=PODMAN_SYSTEMD_UNIT=%n

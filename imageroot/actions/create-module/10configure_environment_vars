@@ -23,7 +23,8 @@ def generate_random_password(length):
     password = random_bytes.hex()
     return password[:length]
 
-MARIADB_ROOT_PASSWORD = data.get("MARIADB_ROOT_PASSWORD", "Monica@1234")
+
+MARIADB_ROOT_PASSWORD =generate_random_password(16)
 MARIADB_DATABASE = data.get("MARIADB_DATABASE", "monica")
 MARIADB_USER = data.get("MARIADB_USER", "monica")
 MARIADB_PASSWORD = generate_random_password(16)
@@ -42,16 +43,24 @@ base64_bytes = base64.b64encode(random_bytes)
 base64_message = base64_bytes.decode('utf-8')
 APP_KEY = "base64:" + base64_message
 
+MEILISEARCH_KEY = generate_random_password(20)
+MEILISEARCH_HOST = "minoca-meilisearch"
+
 app_config = {
     "APP_KEY": APP_KEY,
     "DB_HOST": "mariadb-app",
     "DB_USERNAME": MARIADB_USER,
     "DB_PASSWORD": MARIADB_PASSWORD,
     "DB_DATABASE": MARIADB_DATABASE,
+    "MEILISEARCH_HOST": MEILISEARCH_HOST,
+    "MEILISEARCH_KEY": MEILISEARCH_KEY
+}
+meilisearch_config = {
+    "MEILI_MASTER_KEY": MEILISEARCH_KEY,
 }
 
 agent.write_envfile("app-db.env", app_config)
-
+agent.write_envfile("meilisearch.env", meilisearch_config)
 
 
 agent.dump_env()

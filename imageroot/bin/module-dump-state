@@ -7,5 +7,15 @@
 
 set -e
 
-echo "Dumping monica postgres database"
-podman exec postgresql-app pg_dump -U postgres --format=c  monica > monica.pg_dump
+if ! systemctl --user -q is-active monica.service; then
+    exit 0
+fi
+
+podman exec mariadb-app mysqldump \
+        --databases monica \
+        --default-character-set=utf8mb4 \
+        --skip-dump-date \
+        --ignore-table=mysql.event \
+        --single-transaction \
+        --quick \
+        --add-drop-table  > monica.sql

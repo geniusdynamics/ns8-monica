@@ -14,7 +14,7 @@ images=()
 repobase="${REPOBASE:-ghcr.io/geniusdynamics}"
 # Configure the image name
 reponame="monica"
-APP_VERSION="5.0.0-beta.5-fpm"
+APP_VERSION="5.0.0-beta.5-apache"
 # Create a new empty container image
 container=$(buildah from scratch)
 

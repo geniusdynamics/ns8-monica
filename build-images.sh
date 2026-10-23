@@ -15,6 +15,10 @@ repobase="${REPOBASE:-ghcr.io/geniusdynamics}"
 # Configure the image name
 reponame="monica"
 APP_VERSION="5.0.0-beta.5-apache"
+# Index digest of the tag, rebuilt upstream with PHP 8.3.36 (PHP2Shell fixes).
+# A tag alone is not pulled again on update when an image with that tag
+# already exists on the node; tag@digest is.
+APP_DIGEST="sha256:624b2b9931b4327b84080bd0efcaa2880c9046074bdf660179f7216903f0b359"
 # Create a new empty container image
 container=$(buildah from scratch)
 
@@ -45,7 +49,7 @@ buildah config --entrypoint=/ \
 	--label="org.nethserver.authorizations=traefik@node:routeadm" \
 	--label="org.nethserver.tcp-ports-demand=1" \
 	--label="org.nethserver.rootfull=0" \
-	--label="org.nethserver.images=docker.io/library/redis:7.2.3-bookworm  docker.io/getmeili/meilisearch:latest docker.io/monica:${APP_VERSION} docker.io/mariadb:10.11.5" \
+	--label="org.nethserver.images=docker.io/library/redis:7.2.3-bookworm  docker.io/getmeili/meilisearch:latest docker.io/monica:${APP_VERSION}@${APP_DIGEST} docker.io/mariadb:10.11.5" \
 	"${container}"
 # Commit the image
 buildah commit "${container}" "${repobase}/${reponame}"

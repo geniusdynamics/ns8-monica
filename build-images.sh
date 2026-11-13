@@ -17,7 +17,8 @@ reponame="monica"
 # Node.js 25+ no longer ships Corepack, install it from npm
 # renovate: datasource=npm packageName=corepack
 corepack_version=0.36.0
-APP_VERSION="5.0.0-beta.5-fpm-alpine"
+# renovate: datasource=docker packageName=docker.io/library/monica
+APP_VERSION=5.0.0-beta.5-fpm-alpine
 # Create a new empty container image
 container=$(buildah from scratch)
 

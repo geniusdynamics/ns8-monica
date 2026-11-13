@@ -50,6 +50,7 @@ buildah config --entrypoint=/ \
 	--label="org.nethserver.authorizations=traefik@node:routeadm" \
 	--label="org.nethserver.tcp-ports-demand=1" \
 	--label="org.nethserver.rootfull=0" \
+    --label="org.nethserver.min-core=3.0.0" \
 	--label="org.nethserver.images=docker.io/library/redis:7.4.12-bookworm docker.io/postgres:15.20-alpine3.24 docker.io/getmeili/meilisearch:latest docker.io/monica:${APP_VERSION} docker.io/mariadb:10.11.19" \
 	"${container}"
 # Commit the image
